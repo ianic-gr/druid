@@ -66,14 +66,14 @@ druid_auth_authorizer_MyBasicMetadataAuthorizer_type=basic
 #====================================================================
 #=========================== Zookeeper ==============================
 #====================================================================
-druid_zk_service_host=zookeeper
+druid_zk_service_host=druid_zookeeper
 
 #====================================================================
 #=========================== Metadata ===============================
 #====================================================================
 druid_metadata_storage_host=
 druid_metadata_storage_type=postgresql
-druid_metadata_storage_connector_connectURI=jdbc:postgresql://postgres:5442/druid
+druid_metadata_storage_connector_connectURI=jdbc:postgresql://druid_postgres:5442/druid
 druid_metadata_storage_connector_port=5442
 druid_metadata_storage_connector_user=druid
 druid_metadata_storage_connector_password='va~;!2d4^&YLe;5#'
