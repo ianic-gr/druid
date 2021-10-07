@@ -33,7 +33,7 @@ networks:
 
 services:
   postgres:
-    container_name: postgres
+    #container_name: postgres
     image: postgres:latest
     volumes:
       - metadata_data:/druid/data/postgres
@@ -47,9 +47,7 @@ services:
     command: -p 5442
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - postgres
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -60,8 +58,8 @@ services:
           - node.hostname == server3.ianic.gr 
 
   # Need 3.5 or later for container nodes
-  druid-zookeeper:
-    container_name: druid-zookeeper
+  zookeeper:
+    #container_name: druid-zookeeper
     image: zookeeper:3.5
     expose:
       - "2181"
@@ -69,9 +67,7 @@ services:
       - ZOO_MY_ID=1
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - druid-zookeeper
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -83,7 +79,7 @@ services:
 
   coordinator:
     image: apache/druid:0.22.0
-    container_name: coordinator
+    #container_name: coordinator
     volumes:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
@@ -98,9 +94,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - coordinator
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -112,7 +106,7 @@ services:
 
   broker:
     image: apache/druid:0.22.0
-    container_name: broker
+    #container_name: broker
     volumes:
       - broker_var:/opt/druid/var
     depends_on: 
@@ -127,9 +121,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - broker
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -141,7 +133,7 @@ services:
 
   historical:
     image: apache/druid:0.22.0
-    container_name: historical
+    #container_name: historical
     volumes:
       - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
@@ -157,9 +149,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - historical
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -171,7 +161,7 @@ services:
 
   middlemanager:
     image: apache/druid:0.22.0
-    container_name: middlemanager
+    #container_name: middlemanager
     volumes:
       - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
@@ -188,9 +178,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - middlemanager
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -202,7 +190,7 @@ services:
 
   router:
     image: apache/druid:0.22.0
-    container_name: router
+    #container_name: router
     volumes:
       - router_var:/opt/druid/var
     depends_on:
@@ -217,9 +205,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      infra_iot-big-data-infastructure_iot_bigdata:
-        aliases:
-          - router
+      - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
