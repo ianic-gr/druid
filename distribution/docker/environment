@@ -32,7 +32,7 @@ druid_emitter_logging_logLevel=debug
 #===================================================================
 #============================ Extensions ===========================
 #===================================================================
-druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-lookups-cached-global", "postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-basic-security"]
+druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-lookups-cached-global", "postgresql-metadata-storage", "druid-kafka-indexing-service"] #,"druid-basic-security"]
 
 #===================================================================
 #============================== IANIC ==============================
@@ -41,27 +41,27 @@ druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-looku
 #===================================================================
 #========================== Authentication =========================
 #===================================================================
-druid_auth_authenticatorChain=["MyBasicMetadataAuthenticator"]
-druid_auth_authenticator_MyBasicMetadataAuthenticator_type=basic
-druid_auth_authenticator_MyBasicMetadataAuthenticator_initialAdminPassword=D7gjjoLzmz4zf55X
-druid_auth_authenticator_MyBasicMetadataAuthenticator_initialInternalClientPassword=e*75UsnVbFzjl#!R
-druid_auth_authenticator_MyBasicMetadataAuthenticator_credentialsValidator_type=metadata
-druid_auth_authenticator_MyBasicMetadataAuthenticator_skipOnFailure=false
-druid_auth_authenticator_MyBasicMetadataAuthenticator_authorizerName=MyBasicMetadataAuthorizer
+#druid_auth_authenticatorChain=["MyBasicMetadataAuthenticator"]
+#druid_auth_authenticator_MyBasicMetadataAuthenticator_type=basic
+#druid_auth_authenticator_MyBasicMetadataAuthenticator_initialAdminPassword=D7gjjoLzmz4zf55X
+#druid_auth_authenticator_MyBasicMetadataAuthenticator_initialInternalClientPassword=e*75UsnVbFzjl#!R
+#druid_auth_authenticator_MyBasicMetadataAuthenticator_credentialsValidator_type=metadata
+#druid_auth_authenticator_MyBasicMetadataAuthenticator_skipOnFailure=false
+#druid_auth_authenticator_MyBasicMetadataAuthenticator_authorizerName=MyBasicMetadataAuthorizer
 
 #====================================================================
 #============================ Escalator =============================
 #====================================================================
-druid_escalator_type=basic
-druid_escalator_internalClientUsername=druid_system
-druid_escalator_internalClientPassword=e*75UsnVbFzjl#!R
-druid_escalator_authorizerName=MyBasicMetadataAuthorizer
+#druid_escalator_type=basic
+#druid_escalator_internalClientUsername=druid_system
+#druid_escalator_internalClientPassword=e*75UsnVbFzjl#!R
+#druid_escalator_authorizerName=MyBasicMetadataAuthorizer
 
 #====================================================================
 #=========================== Authorizer =============================
 #====================================================================
-druid_auth_authorizers=["MyBasicMetadataAuthorizer"]
-druid_auth_authorizer_MyBasicMetadataAuthorizer_type=basic
+#druid_auth_authorizers=["MyBasicMetadataAuthorizer"]
+#druid_auth_authorizer_MyBasicMetadataAuthorizer_type=basic
 
 #====================================================================
 #=========================== Zookeeper ==============================
