@@ -59,7 +59,7 @@ services:
     restart: unless-stopped
 
   coordinator:
-    image: apache/druid:tag
+    image: apache/druid:0.22.0
     container_name: coordinator
     volumes:
       - druid_shared:/opt/shared
@@ -76,7 +76,7 @@ services:
     restart: unless-stopped
 
   broker:
-    image: apache/druid:tag
+    image: apache/druid:0.22.0
     container_name: broker
     volumes:
       - broker_var:/opt/druid/var
@@ -93,7 +93,7 @@ services:
     restart: unless-stopped
 
   historical:
-    image: apache/druid:tag
+    image: apache/druid:0.22.0
     container_name: historical
     volumes:
       - druid_shared:/opt/shared
@@ -111,7 +111,7 @@ services:
     restart: unless-stopped
 
   middlemanager:
-    image: apache/druid:tag
+    image: apache/druid:0.22.0
     container_name: middlemanager
     volumes:
       - druid_shared:/opt/shared
@@ -130,7 +130,7 @@ services:
     restart: unless-stopped
 
   router:
-    image: apache/druid:tag
+    image: apache/druid:0.22.0
     container_name: router
     volumes:
       - router_var:/opt/druid/var
