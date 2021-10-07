@@ -18,6 +18,11 @@
 #
 version: "2.2"
 
+networks:
+  default:
+    external: true
+    name: iot-big-data-infastructure_iot_bigdata
+
 volumes:
   metadata_data: {}
   middle_var: {}
@@ -41,7 +46,7 @@ services:
 
   # Need 3.5 or later for container nodes
   zookeeper:
-    container_name: zookeeper
+    container_name: druid-zookeeper
     image: zookeeper:3.5
     ports:
       - "2181:2181"
