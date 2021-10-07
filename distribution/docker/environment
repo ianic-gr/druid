@@ -32,7 +32,7 @@ druid_emitter_logging_logLevel=debug
 #===================================================================
 #============================ Extensions ===========================
 #===================================================================
-druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-lookups-cached-global", "postgresql-metadata-storage", "druid-kafka-indexing-service"]
+druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-lookups-cached-global", "postgresql-metadata-storage", "druid-kafka-indexing-service", "druid-basic-security"]
 
 #===================================================================
 #============================== IANIC ==============================
