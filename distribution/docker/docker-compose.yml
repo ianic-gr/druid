@@ -28,9 +28,8 @@ volumes:
   druid_shared: {}
 
 networks:
-  default:
+  iot-big-data-infastructure_iot_bigdata:
     external: true
-    name: iot-big-data-infastructure_iot_bigdata
 
 services:
   postgres:
@@ -47,6 +46,18 @@ services:
       - "5442"
     command: -p 5442
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - postgres
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr 
 
   # Need 3.5 or later for container nodes
   zookeeper:
@@ -57,6 +68,18 @@ services:
     environment:
       - ZOO_MY_ID=1
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - druid-zookeeper
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr 
 
   coordinator:
     image: apache/druid:0.22.0
@@ -74,6 +97,18 @@ services:
     env_file:
       - environment
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - coordinator
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr 
 
   broker:
     image: apache/druid:0.22.0
@@ -91,6 +126,18 @@ services:
     env_file:
       - environment
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - broker
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr
 
   historical:
     image: apache/druid:0.22.0
@@ -109,6 +156,18 @@ services:
     env_file:
       - environment
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - historical
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr
 
   middlemanager:
     image: apache/druid:0.22.0
@@ -128,6 +187,18 @@ services:
     env_file:
       - environment
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - middlemanager
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr
 
   router:
     image: apache/druid:0.22.0
@@ -145,3 +216,16 @@ services:
     env_file:
       - environment
     restart: unless-stopped
+    networks:
+      iot-big-data-infastructure_iot_bigdata:
+        aliases:
+          - router
+    deploy:
+      mode: replicated
+      replicas: 1
+      #restart_policy:
+      #  condition: on-failure
+      placement:
+        constraints:
+          - node.hostname == server3.ianic.gr
+    
