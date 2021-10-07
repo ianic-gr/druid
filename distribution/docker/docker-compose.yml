@@ -60,7 +60,7 @@ services:
           - node.hostname == server3.ianic.gr 
 
   # Need 3.5 or later for container nodes
-  zookeeper:
+  druid-zookeeper:
     container_name: druid-zookeeper
     image: zookeeper:3.5
     expose:
