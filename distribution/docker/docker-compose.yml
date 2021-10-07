@@ -28,7 +28,7 @@ volumes:
   druid_shared: {}
 
 networks:
-  iot-big-data-infastructure_iot_bigdata:
+  infra_iot-big-data-infastructure_iot_bigdata:
     external: true
 
 services:
@@ -47,7 +47,7 @@ services:
     command: -p 5442
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - postgres
     deploy:
@@ -69,7 +69,7 @@ services:
       - ZOO_MY_ID=1
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - druid-zookeeper
     deploy:
@@ -98,7 +98,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - coordinator
     deploy:
@@ -127,7 +127,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - broker
     deploy:
@@ -157,7 +157,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - historical
     deploy:
@@ -188,7 +188,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - middlemanager
     deploy:
@@ -217,7 +217,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      iot-big-data-infastructure_iot_bigdata:
+      infra_iot-big-data-infastructure_iot_bigdata:
         aliases:
           - router
     deploy:
