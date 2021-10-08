@@ -29,9 +29,9 @@ volumes:
   zookeeper_data: {}
   zookeeper_datalog: {}
 
-#networks:
-#  infra_iot-big-data-infastructure_iot_bigdata:
-#    external: true
+networks:
+  default:
+    attachable: true
 
 services:
   postgres:
