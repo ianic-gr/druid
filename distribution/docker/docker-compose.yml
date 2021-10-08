@@ -26,10 +26,12 @@ volumes:
   coordinator_var: {}
   router_var: {}
   druid_shared: {}
+  zookeeper_data: {}
+  zookeeper_datalog: {}
 
-networks:
-  infra_iot-big-data-infastructure_iot_bigdata:
-    external: true
+#networks:
+#  infra_iot-big-data-infastructure_iot_bigdata:
+#    external: true
 
 services:
   postgres:
@@ -46,8 +48,8 @@ services:
       - "5442"
     command: -p 5442
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -62,13 +64,13 @@ services:
     #container_name: druid-zookeeper
     image: zookeeper:3.5
     hostname: zookeeper
-    expose:
-      - "2181"
+    #expose:
+    #  - "2181"
     environment:
       - ZOO_MY_ID=1
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -87,15 +89,15 @@ services:
     depends_on: 
       - zookeeper
       - postgres
-    expose:
-      - "8081"
+    #expose:
+    #  - "8081"
     command:
       - coordinator
     env_file:
       - environment
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -114,15 +116,15 @@ services:
       - zookeeper
       - postgres
       - coordinator
-    expose:
-      - "8082"
+    #expose:
+    #  - "8082"
     command:
       - broker
     env_file:
       - environment
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -142,15 +144,15 @@ services:
       - zookeeper
       - postgres
       - coordinator
-    expose:
-      - "8083"
+    #expose:
+    #  - "8083"
     command:
       - historical
     env_file:
       - environment
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -170,16 +172,16 @@ services:
       - zookeeper
       - postgres
       - coordinator
-    expose:
-      - "8091"
-      - "8100-8105"
+    #expose:
+    # - "8091"
+    #  - "8100-8105"
     command:
       - middleManager
     env_file:
       - environment
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
@@ -205,8 +207,8 @@ services:
     env_file:
       - environment
     restart: unless-stopped
-    networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+    #networks:
+    #  - infra_iot-big-data-infastructure_iot_bigdata
     deploy:
       mode: replicated
       replicas: 1
