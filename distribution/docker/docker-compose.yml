@@ -35,7 +35,7 @@ networks:
 
 services:
   postgres:
-    #container_name: postgres
+    container_name: postgres
     image: postgres:latest
     volumes:
       - metadata_data:/druid/data/postgres
@@ -47,39 +47,39 @@ services:
     expose:
       - "5442"
     command: -p 5442
-    #restart: unless-stopped
+    restart: unless-stopped
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
        
 
   # Need 3.5 or later for container nodes
   zookeeper:
-    #container_name: druid-zookeeper
+    container_name: druid-zookeeper
     image: zookeeper:3.5
     hostname: zookeeper
     expose:
       - "2181"
     environment:
       - ZOO_MY_ID=1
-    #restart: unless-stopped
+    restart: unless-stopped
     volumes:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
        
 
   coordinator:
     image: apache/druid:0.22.0
-    #container_name: coordinator
+    container_name: coordinator
     volumes:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
@@ -92,18 +92,18 @@ services:
       - coordinator
     env_file:
       - environment
-    #restart: unless-stopped
+    restart: unless-stopped
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
        
 
   broker:
     image: apache/druid:0.22.0
-    #container_name: broker
+    container_name: broker
     volumes:
       - broker_var:/opt/druid/var
     depends_on: 
@@ -116,18 +116,18 @@ services:
       - broker
     env_file:
       - environment
-    #restart: unless-stopped
+    restart: unless-stopped
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
       
 
   historical:
     image: apache/druid:0.22.0
-    #container_name: historical
+    container_name: historical
     volumes:
       - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
@@ -141,18 +141,18 @@ services:
       - historical
     env_file:
       - environment
-    #restart: unless-stopped
+    restart: unless-stopped
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
       
 
   middlemanager:
     image: apache/druid:0.22.0
-    #container_name: middlemanager
+    container_name: middlemanager
     volumes:
       - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
@@ -167,18 +167,18 @@ services:
       - middleManager
     env_file:
       - environment
-    #restart: unless-stopped
+    restart: unless-stopped
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
       
 
   router:
     image: apache/druid:0.22.0
-    #container_name: router
+    container_name: router
     volumes:
       - router_var:/opt/druid/var
     depends_on:
@@ -191,12 +191,12 @@ services:
       - router
     env_file:
       - environment
-    #restart: unless-stopped
+    restart: unless-stopped
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
-    deploy:
-      mode: global
-      restart_policy:
-        condition: on-failure
+    #deploy:
+    #  mode: global
+    #  restart_policy:
+    #    condition: on-failure
       
     
