@@ -88,7 +88,7 @@ services:
       - 2181:2181
     environment:
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888
     logging:
       driver: "json-file"
       options:
@@ -97,7 +97,7 @@ services:
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
-        constraints: [node.labels.zookeeper1 == true]
+        constraints: [node.hostname == server3.ianic.gr]
       resources:  
         limits:                                                                                          
           memory: 1G                                 
@@ -109,72 +109,6 @@ services:
       restart_policy:                                
         condition: on-failure
 
-  zookeeper2:
-    image: zookeeper:latest
-    hostname: zookeeper2
-    volumes:
-      - zookeeper_data:/data
-      - zookeeper_datalog:/datalog
-    networks:
-      - druid_net
-    ports:
-      - 2182:2181
-    environment:
-      ZOO_MY_ID: 2
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper3:2888:3888
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "10"
-    deploy:                       
-      replicas: 1                                                                                        
-      placement:                                                                                         
-        constraints: [node.labels.zookeeper2 == true]
-      resources:                                                                                         
-        limits:                                                                                          
-          memory: 1G                                 
-        reservations:                                                                                    
-          memory: 1G                                                                                     
-      update_config:                                 
-        parallelism: 2                                                                                   
-        delay: 10s                                                                                       
-      restart_policy:                                
-        condition: on-failure
-
-  zookeeper3:
-    image: zookeeper:latest
-    hostname: zookeeper3
-    volumes:
-      - zookeeper_data:/data
-      - zookeeper_datalog:/datalog
-    networks:
-      - druid_net
-    ports:
-      - 2183:2181
-    environment:
-      ZOO_MY_ID: 3
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=0.0.0.0:2888:3888
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "10"
-    deploy:                                                                                              
-      replicas: 1                                                                                        
-      placement:                                                                                         
-        constraints: [node.labels.zookeeper3 == true]                                                    
-      resources:                                                                                         
-        limits:                                                                                          
-          memory: 1G                                                                                     
-        reservations:                                                                                    
-          memory: 1G                                                                                     
-      update_config:                                                                                     
-        parallelism: 2                                                                                   
-        delay: 10s                                                                                       
-      restart_policy:                                                                                    
-        condition: on-failure
-
   coordinator:
     image: apache/druid:0.22.0
     container_name: coordinator
@@ -183,8 +117,6 @@ services:
       - coordinator_var:/opt/druid/var
     depends_on: 
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
       - postgres
     expose:
       - "8081"
@@ -208,8 +140,6 @@ services:
       - broker_var:/opt/druid/var
     depends_on: 
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
       - postgres
       - coordinator
     expose:
@@ -235,8 +165,6 @@ services:
       - historical_var:/opt/druid/var
     depends_on: 
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
       - postgres
       - coordinator
     expose:
@@ -262,8 +190,6 @@ services:
       - middle_var:/opt/druid/var
     depends_on: 
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
       - postgres
       - coordinator
     expose:
@@ -289,8 +215,6 @@ services:
       - router_var:/opt/druid/var
     depends_on:
       - zookeeper1
-      - zookeeper2
-      - zookeeper3
       - postgres
       - coordinator
     ports:
