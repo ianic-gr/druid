@@ -30,7 +30,7 @@ volumes:
   zookeeper_datalog: {}
 
 networks:
-  default:
+  druid_net:
     attachable: true
 
 services:
@@ -48,27 +48,27 @@ services:
       - "5442"
     command: -p 5442
     restart: unless-stopped
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
+    networks:
+      - infra_iot-big-data-infastructure_iot_bigdata
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
        
 
   # Need 3.5 or later for container nodes
-  zookeeper:
-    container_name: druid-zookeeper
-    image: zookeeper:3.5
-    hostname: zookeeper
-    expose:
-      - "2181"
-    environment:
-      - ZOO_MY_ID=1
-    restart: unless-stopped
-    volumes:
-      - zookeeper_data:/data
-      - zookeeper_datalog:/datalog
+  #zookeeper:
+  #  container_name: druid-zookeeper
+  #  image: zookeeper:3.5
+  #  hostname: zookeeper
+  #  expose:
+  #    - "2181"
+  #  environment:
+  #    - ZOO_MY_ID=1
+  #  restart: unless-stopped
+  #  volumes:
+  #    - zookeeper_data:/data
+  #    - zookeeper_datalog:/datalog
     #networks:
     #  - infra_iot-big-data-infastructure_iot_bigdata
     #deploy:
@@ -76,6 +76,104 @@ services:
     #  restart_policy:
     #    condition: on-failure
        
+  zookeeper1:
+    image: zookeeper:latest
+    hostname: zookeeper1
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+    networks:
+      - druid_net
+    ports:
+      - 2181:2181
+    environment:
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=0.0.0.0:2888:3888 server.2=zookeeper2:2888:3888 server.3=zookeeper3:2888:3888
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "10"
+    deploy:                 
+      replicas: 1                 
+      placement:                                                                                         
+        constraints: [node.labels.zookeeper1 == true]
+      resources:  
+        limits:                                                                                          
+          memory: 1G                                 
+        reservations:
+          memory: 1G                                                                                     
+      update_config:                                                                                     
+        parallelism: 2
+        delay: 10s  
+      restart_policy:                                
+        condition: on-failure
+
+  zookeeper2:
+    image: zookeeper:latest
+    hostname: zookeeper2
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+    networks:
+      - druid_net
+    ports:
+      - 2182:2181
+    environment:
+      ZOO_MY_ID: 2
+      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=0.0.0.0:2888:3888 server.3=zookeeper3:2888:3888
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "10"
+    deploy:                       
+      replicas: 1                                                                                        
+      placement:                                                                                         
+        constraints: [node.labels.zookeeper2 == true]
+      resources:                                                                                         
+        limits:                                                                                          
+          memory: 1G                                 
+        reservations:                                                                                    
+          memory: 1G                                                                                     
+      update_config:                                 
+        parallelism: 2                                                                                   
+        delay: 10s                                                                                       
+      restart_policy:                                
+        condition: on-failure
+
+  zookeeper3:
+    image: zookeeper:latest
+    hostname: zookeeper3
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+    networks:
+      - druid_net
+    ports:
+      - 2183:2181
+    environment:
+      ZOO_MY_ID: 3
+      ZOO_SERVERS: server.1=zookeeper1:2888:3888 server.2=zookeeper2:2888:3888 server.3=0.0.0.0:2888:3888
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "50m"
+        max-file: "10"
+    deploy:                                                                                              
+      replicas: 1                                                                                        
+      placement:                                                                                         
+        constraints: [node.labels.zookeeper3 == true]                                                    
+      resources:                                                                                         
+        limits:                                                                                          
+          memory: 1G                                                                                     
+        reservations:                                                                                    
+          memory: 1G                                                                                     
+      update_config:                                                                                     
+        parallelism: 2                                                                                   
+        delay: 10s                                                                                       
+      restart_policy:                                                                                    
+        condition: on-failure
 
   coordinator:
     image: apache/druid:0.22.0
@@ -84,7 +182,9 @@ services:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
     depends_on: 
-      - zookeeper
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
       - postgres
     expose:
       - "8081"
@@ -93,12 +193,12 @@ services:
     env_file:
       - environment
     restart: unless-stopped
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
+    networks:
+      - infra_iot-big-data-infastructure_iot_bigdata
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
        
 
   broker:
@@ -107,7 +207,9 @@ services:
     volumes:
       - broker_var:/opt/druid/var
     depends_on: 
-      - zookeeper
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
       - postgres
       - coordinator
     expose:
@@ -117,12 +219,12 @@ services:
     env_file:
       - environment
     restart: unless-stopped
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
+    networks:
+      - infra_iot-big-data-infastructure_iot_bigdata
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
       
 
   historical:
@@ -132,7 +234,9 @@ services:
       - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
     depends_on: 
-      - zookeeper
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
       - postgres
       - coordinator
     expose:
@@ -142,12 +246,12 @@ services:
     env_file:
       - environment
     restart: unless-stopped
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
+    networks:
+      - infra_iot-big-data-infastructure_iot_bigdata
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
       
 
   middlemanager:
@@ -157,7 +261,9 @@ services:
       - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
     depends_on: 
-      - zookeeper
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
       - postgres
       - coordinator
     expose:
@@ -168,12 +274,12 @@ services:
     env_file:
       - environment
     restart: unless-stopped
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
+    networks:
+      - infra_iot-big-data-infastructure_iot_bigdata
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
       
 
   router:
@@ -182,7 +288,9 @@ services:
     volumes:
       - router_var:/opt/druid/var
     depends_on:
-      - zookeeper
+      - zookeeper1
+      - zookeeper2
+      - zookeeper3
       - postgres
       - coordinator
     ports:
@@ -192,11 +300,11 @@ services:
     env_file:
       - environment
     restart: unless-stopped
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
+    networks:
+      - infra_iot-big-data-infastructure_iot_bigdata
+    deploy:
+      mode: global
+      restart_policy:
+        condition: on-failure
       
     
