@@ -49,7 +49,7 @@ services:
     command: -p 5442
     restart: unless-stopped
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - druid_net
     deploy:
       mode: global
       restart_policy:
@@ -70,7 +70,7 @@ services:
   #    - zookeeper_data:/data
   #    - zookeeper_datalog:/datalog
     #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
+    #  - druid_net
     #deploy:
     #  mode: global
     #  restart_policy:
@@ -194,7 +194,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - druid_net
     deploy:
       mode: global
       restart_policy:
@@ -220,7 +220,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - druid_net
     deploy:
       mode: global
       restart_policy:
@@ -247,7 +247,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - druid_net
     deploy:
       mode: global
       restart_policy:
@@ -275,7 +275,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - druid_net
     deploy:
       mode: global
       restart_policy:
@@ -301,7 +301,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - druid_net
     deploy:
       mode: global
       restart_policy:
