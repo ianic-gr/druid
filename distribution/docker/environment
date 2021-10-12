@@ -67,7 +67,6 @@ druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-looku
 #=========================== Zookeeper ==============================
 #====================================================================
 druid_zk_service_host=zookeeper1
-druid_zk_paths_base=/druid
 
 #====================================================================
 #=========================== Metadata ===============================
