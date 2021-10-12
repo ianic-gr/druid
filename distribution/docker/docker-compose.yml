@@ -89,23 +89,10 @@ services:
     environment:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=0.0.0.0:2888:3888
-    logging:
-      driver: "json-file"
-      options:
-        max-size: "50m"
-        max-file: "10"
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
-        constraints: [node.hostname == server3.ianic.gr]
-      resources:  
-        limits:                                                                                          
-          memory: 1G                                 
-        reservations:
-          memory: 1G                                                                                     
-      update_config:                                                                                     
-        parallelism: 2
-        delay: 10s  
+        constraints: [node.hostname == server3.ianic.gr]                                                                                      
       restart_policy:                                
         condition: on-failure
 
