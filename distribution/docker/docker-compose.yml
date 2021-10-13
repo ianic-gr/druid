@@ -113,6 +113,8 @@ services:
       - "8081"
     command:
       - coordinator
+    environment:
+      DRUID_HOST: coordinator
     env_file:
       - environment
     restart: unless-stopped
