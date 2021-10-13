@@ -67,7 +67,7 @@ druid_extensions_loadList=["druid-histogram", "druid-datasketches", "druid-looku
 #=========================== Zookeeper ==============================
 #====================================================================
 druid_zk_service_host=zookeeper1
-druid_host=localhost
+druid_host=server3.ianic.gr
 
 #====================================================================
 #=========================== Metadata ===============================
