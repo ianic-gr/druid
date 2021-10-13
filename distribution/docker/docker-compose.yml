@@ -58,7 +58,6 @@ services:
         condition: on-failure
 
   postgres:
-    container_name: postgres
     image: postgres:latest
     volumes:
       - metadata_data:/druid/data/postgres
@@ -67,10 +66,7 @@ services:
        POSTGRES_PASSWORD: va~;!2d4^&YLe;5#
        POSTGRES_USER: druid
        POSTGRES_DB: druid
-    expose:
-      - "5442"
     command: -p 5442
-    restart: unless-stopped
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -79,66 +75,17 @@ services:
         constraints: [node.hostname == server3.ianic.gr]                                                                                      
       restart_policy:                                
         condition: on-failure
-       
-
-  # Need 3.5 or later for container nodes
-  #zookeeper:
-  #  container_name: druid-zookeeper
-  #  image: zookeeper:3.5
-  #  hostname: zookeeper
-  #  expose:
-  #    - "2181"
-  #  environment:
-  #    - ZOO_MY_ID=1
-  #  restart: unless-stopped
-  #  volumes:
-  #    - zookeeper_data:/data
-  #    - zookeeper_datalog:/datalog
-    #networks:
-    #  - infra_iot-big-data-infastructure_iot_bigdata
-    #deploy:
-    #  mode: global
-    #  restart_policy:
-    #    condition: on-failure
-       
-  #zookeeper1:
-  #  image: zookeeper:latest
-  #  hostname: zookeeper1
-  #  volumes:
-  #    - zookeeper_data:/data
-  #    - zookeeper_datalog:/datalog
-  #  networks:
-  #    - infra_iot-big-data-infastructure_iot_bigdata
-  #  ports:
-  #    - 2181:2181
-  #  environment:
-  #    ZOO_MY_ID: 1
-  #    ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
-  #    ZOOKEEPER_CLIENT_PORT: 2181
-  #  deploy:                 
-  #    replicas: 1                 
-  #    placement:                                                                                         
-  #      constraints: [node.hostname == server3.ianic.gr]                                                                                      
-  #    restart_policy:                                
-  #      condition: on-failure
 
   coordinator:
     image: apache/druid:0.22.0
-    container_name: coordinator
     hostname: coordinator
     volumes:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
-    depends_on: 
-      - zookeeper1
-      - postgres
-    expose:
-      - "8081"
     command:
       - coordinator
     env_file:
       - environment
-    restart: unless-stopped
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -148,24 +95,15 @@ services:
       restart_policy:                                
         condition: on-failure
        
-
   broker:
     image: apache/druid:0.22.0
-    container_name: broker
     hostname: broker
     volumes:
       - broker_var:/opt/druid/var
-    depends_on: 
-      - zookeeper1
-      - postgres
-      - coordinator
-    expose:
-      - "8082"
     command:
       - broker
     env_file:
       - broker_env
-    restart: unless-stopped
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -175,25 +113,16 @@ services:
       restart_policy:                                
         condition: on-failure
       
-
   historical:
     image: apache/druid:0.22.0
-    container_name: historical
     hostname: historical
     volumes:
       - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
-    depends_on: 
-      - zookeeper1
-      - postgres
-      - coordinator
-    expose:
-      - "8083"
     command:
       - historical
     env_file:
       - historical_env
-    restart: unless-stopped
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -203,26 +132,16 @@ services:
       restart_policy:                                
         condition: on-failure
       
-
   middlemanager:
     image: apache/druid:0.22.0
-    container_name: middlemanager
     hostname: middlemanager
     volumes:
       - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
-    depends_on: 
-      - zookeeper1
-      - postgres
-      - coordinator
-    expose:
-      - "8091"
-      - "8100-8105"
     command:
       - middleManager
     env_file:
       - middlemanager_env
-    restart: unless-stopped
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -232,24 +151,17 @@ services:
       restart_policy:                                
         condition: on-failure
       
-
   router:
     image: apache/druid:0.22.0
-    container_name: router
     hostname: router
     volumes:
       - router_var:/opt/druid/var
-    depends_on:
-      - zookeeper1
-      - postgres
-      - coordinator
     ports:
       - "8888:8888"
     command:
       - router
     env_file:
       - router_env
-    restart: unless-stopped
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -258,5 +170,3 @@ services:
         constraints: [node.hostname == server3.ianic.gr]                                                                                      
       restart_policy:                                
         condition: on-failure
-      
-    
