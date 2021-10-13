@@ -169,7 +169,7 @@ services:
     command:
       - historical
     env_file:
-      - environment
+      - historical_env
     restart: unless-stopped
     networks:
       - zookeeper_zoo_net
@@ -198,7 +198,7 @@ services:
     command:
       - middleManager
     env_file:
-      - environment
+      - middlemanager_env
     restart: unless-stopped
     networks:
       - zookeeper_zoo_net
@@ -225,7 +225,7 @@ services:
     command:
       - router
     env_file:
-      - environment
+      - router_env
     restart: unless-stopped
     networks:
       - zookeeper_zoo_net
