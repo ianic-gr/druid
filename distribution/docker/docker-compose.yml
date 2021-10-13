@@ -28,6 +28,7 @@ volumes:
   druid_shared: {}
   zookeeper_data: {}
   zookeeper_datalog: {}
+  zoo_logs: {}
 
 networks:
   infra_iot-big-data-infastructure_iot_bigdata:
