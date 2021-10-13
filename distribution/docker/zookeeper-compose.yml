@@ -3,6 +3,7 @@ version: "3.6"
 volumes:
   zookeeper_data: {}
   zookeeper_datalog: {}
+  zoo_logs: {}
 
 networks:
   zoo_net:
@@ -15,6 +16,7 @@ services:
     volumes:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
+      - zoo_logs:/logs
     networks:
       - zoo_net
     ports:

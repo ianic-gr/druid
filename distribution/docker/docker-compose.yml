@@ -30,7 +30,7 @@ volumes:
   zookeeper_datalog: {}
 
 networks:
-  zoo_net:
+  zookeeper_zoo_net:
     external: true
 
 services:
@@ -49,7 +49,7 @@ services:
     command: -p 5442
     restart: unless-stopped
     networks:
-      - zoo_net
+      - zookeeper_zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -72,7 +72,7 @@ services:
   #    - zookeeper_data:/data
   #    - zookeeper_datalog:/datalog
     #networks:
-    #  - zoo_net
+    #  - zookeeper_zoo_net
     #deploy:
     #  mode: global
     #  restart_policy:
@@ -85,7 +85,7 @@ services:
   #    - zookeeper_data:/data
   #    - zookeeper_datalog:/datalog
   #  networks:
-  #    - zoo_net
+  #    - zookeeper_zoo_net
   #  ports:
   #    - 2181:2181
   #  environment:
@@ -116,7 +116,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - zoo_net
+      - zookeeper_zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -142,7 +142,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - zoo_net
+      - zookeeper_zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -169,7 +169,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - zoo_net
+      - zookeeper_zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -197,7 +197,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - zoo_net
+      - zookeeper_zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -223,7 +223,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - zoo_net
+      - zookeeper_zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
