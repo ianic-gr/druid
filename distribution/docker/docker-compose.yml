@@ -102,6 +102,7 @@ services:
   coordinator:
     image: apache/druid:0.22.0
     container_name: coordinator
+    hostname: coordinator
     volumes:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
