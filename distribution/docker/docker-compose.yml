@@ -30,8 +30,8 @@ volumes:
   zookeeper_datalog: {}
 
 networks:
-  druid_net:
-    attachable: true
+  zoo_net:
+    external: true
 
 services:
   postgres:
@@ -49,7 +49,7 @@ services:
     command: -p 5442
     restart: unless-stopped
     networks:
-      - druid_net
+      - zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -72,32 +72,32 @@ services:
   #    - zookeeper_data:/data
   #    - zookeeper_datalog:/datalog
     #networks:
-    #  - druid_net
+    #  - zoo_net
     #deploy:
     #  mode: global
     #  restart_policy:
     #    condition: on-failure
        
-  zookeeper1:
-    image: zookeeper:latest
-    hostname: zookeeper1
-    volumes:
-      - zookeeper_data:/data
-      - zookeeper_datalog:/datalog
-    networks:
-      - druid_net
-    ports:
-      - 2181:2181
-    environment:
-      ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
-      ZOOKEEPER_CLIENT_PORT: 2181
-    deploy:                 
-      replicas: 1                 
-      placement:                                                                                         
-        constraints: [node.hostname == server3.ianic.gr]                                                                                      
-      restart_policy:                                
-        condition: on-failure
+  #zookeeper1:
+  #  image: zookeeper:latest
+  #  hostname: zookeeper1
+  #  volumes:
+  #    - zookeeper_data:/data
+  #    - zookeeper_datalog:/datalog
+  #  networks:
+  #    - zoo_net
+  #  ports:
+  #    - 2181:2181
+  #  environment:
+  #    ZOO_MY_ID: 1
+  #    ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
+  #    ZOOKEEPER_CLIENT_PORT: 2181
+  #  deploy:                 
+  #    replicas: 1                 
+  #    placement:                                                                                         
+  #      constraints: [node.hostname == server3.ianic.gr]                                                                                      
+  #    restart_policy:                                
+  #      condition: on-failure
 
   coordinator:
     image: apache/druid:0.22.0
@@ -116,7 +116,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - druid_net
+      - zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -142,7 +142,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - druid_net
+      - zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -169,7 +169,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - druid_net
+      - zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -197,7 +197,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - druid_net
+      - zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -223,7 +223,7 @@ services:
       - environment
     restart: unless-stopped
     networks:
-      - druid_net
+      - zoo_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
