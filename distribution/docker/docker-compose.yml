@@ -141,7 +141,7 @@ services:
     command:
       - broker
     env_file:
-      - environment
+      - broker_env
     restart: unless-stopped
     networks:
       - zookeeper_zoo_net
