@@ -38,3 +38,17 @@ it to the base image above.
 `docker build -t apache/druid:tag-mysql --build-arg DRUID_RELEASE=apache/druid:tag -f distribution/docker/Dockerfile.mysql .`
 
 where `druid:tag` is the version to use as the base.
+
+# Docker Swarm deployment
+
+## Docker compose
+First run ``docker stack deploy -c zookeeper-compose.yml zoo``
+to deploy the zookeeper
+
+For druid run ``docker stack deploy -c docker-compose.yml druid``
+
+## Configuration
+The configuration for each of the druid services is in
+ ``{serviceName}_env``
+
+ This is done as a temporary workaround because each service needs a different ``druid.host``
