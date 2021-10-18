@@ -247,7 +247,3 @@ configs:
     file: ./conf/druid/middleManager/jvm.config
   middleManager_runtime_config:
     file: ./conf/druid/middleManager/runtime.properties
-  overlord_jvm_config:
-    file: ./conf/druid/overlord/jvm.config
-  overlord_runtime_config:
-    file: ./conf/druid/overlord/runtime.properties
