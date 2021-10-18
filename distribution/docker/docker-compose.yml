@@ -83,18 +83,18 @@ services:
     volumes:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/_common
+      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - coordinator
     configs:
       - source: common_runtime_config
-        target: /opt/druid/conf/druid/_common/common.runtime.properties
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
       - source: common_log4j_config
-        target: /opt/druid/conf/druid/_common/log4j2.xml
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
       - source: coordinator_jvm_config
-        target: /opt/druid/conf/druid/coordinator/jvm.config
+        target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/jvm.config
       - source: coordinator_runtime_config
-        target: /opt/druid/conf/druid/coordinator/runtime.properties
+        target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/runtime.properties
     # env_file:
     #   - environment
     networks:
@@ -111,18 +111,18 @@ services:
     hostname: broker
     volumes:
       - broker_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/_common
+      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - broker
     configs:
       - source: common_runtime_config
-        target: /opt/druid/conf/druid/_common/common.runtime.properties
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
       - source: common_log4j_config
-        target: /opt/druid/conf/druid/_common/log4j2.xml
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
       - source: broker_jvm_config
-        target: /opt/druid/conf/druid/broker/jvm.config
+        target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
       - source: broker_runtime_config
-        target: /opt/druid/conf/druid/broker/runtime.properties
+        target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
     # env_file:
     #   - broker_env
     networks:
@@ -140,18 +140,18 @@ services:
     volumes:
       - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/_common
+      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - historical
     configs:
       - source: common_runtime_config
-        target: /opt/druid/conf/druid/_common/common.runtime.properties
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
       - source: common_log4j_config
-        target: /opt/druid/conf/druid/_common/log4j2.xml
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
       - source: historical_jvm_config
-        target: /opt/druid/conf/druid/historical/jvm.config
+        target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
       - source: historical_runtime_config
-        target: /opt/druid/conf/druid/historical/runtime.properties
+        target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
     # env_file:
     #   - historical_env
     networks:
@@ -169,18 +169,18 @@ services:
     volumes:
       - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/_common
+      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - middleManager
     configs:
       - source: common_runtime_config
-        target: /opt/druid/conf/druid/_common/common.runtime.properties
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
       - source: common_log4j_config
-        target: /opt/druid/conf/druid/_common/log4j2.xml
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
       - source: middleManager_jvm_config
-        target: /opt/druid/conf/druid/middleManager/jvm.config
+        target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
       - source: middleManager_runtime_config
-        target: /opt/druid/conf/druid/middleManager/runtime.properties
+        target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
     # env_file:
     #   - middlemanager_env
     networks:
@@ -197,20 +197,20 @@ services:
     hostname: router
     volumes:
       - router_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/_common
+      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     ports:
       - "8888:8888"
     command:
       - router
     configs:
       - source: common_runtime_config
-        target: /opt/druid/conf/druid/_common/common.runtime.properties
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
       - source: common_log4j_config
-        target: /opt/druid/conf/druid/_common/log4j2.xml
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
       - source: router_jvm_config
-        target: /opt/druid/conf/druid/router/jvm.config
+        target: /opt/druid/conf/druid/cluster/query/router/jvm.config
       - source: router_runtime_config
-        target: /opt/druid/conf/druid/router/runtime.properties
+        target: /opt/druid/conf/druid/cluster/query/router/runtime.properties
     # env_file:
     #   - router_env
     networks:
