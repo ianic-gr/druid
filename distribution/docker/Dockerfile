@@ -60,9 +60,9 @@ COPY distribution/docker/druid.sh /druid.sh
 # create necessary directories which could be mounted as volume
 #   /opt/druid/var is used to keep individual files(e.g. log) of each Druid service
 #   /opt/shared is used to keep segments and task logs shared among Druid services
-RUN mkdir /opt/druid/var /opt/shared \
- && chown druid:druid /opt/druid/var /opt/shared /opt/druid \
- && chmod 775 /opt/druid/var /opt/shared /opt/druid
+RUN mkdir /opt/druid/var /opt/shared /tmp/conf/ \
+ && chown druid:druid /opt/druid/var /opt/shared /opt/druid /tmp/conf/ \
+ && chmod 775 /opt/druid/var /opt/shared /opt/druid /tmp/conf/
 
 USER druid
 VOLUME /opt/druid/var

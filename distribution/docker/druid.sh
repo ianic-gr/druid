@@ -45,10 +45,12 @@ echo "$(date -Is) startup service $SERVICE"
 
 # We put all the config in /tmp/conf to allow for a
 # read-only root filesystem
-mkdir -p /tmp/conf/
-chmod 777 /tmp/conf/
-test -d /tmp/conf/druid && rm -r /tmp/conf/druid
+# mkdir -p /tmp/conf/
+# chmod 777 /tmp/conf/
+# test -d /tmp/conf/druid && rm -r /tmp/conf/druid
 cp -r /opt/druid/conf/druid /tmp/conf/druid
+
+echo "Ekana copy :)"
 
 getConfPath() {
     cluster_conf_base=/tmp/conf/druid/cluster
