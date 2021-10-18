@@ -95,13 +95,13 @@ setJavaKey() {
 ## Setup host names
 if [ -n "${ZOOKEEPER}" ];
 then
-    setKey _common druid.zk.service.host "${ZOOKEEPER}"
+    # setKey _common druid.zk.service.host "${ZOOKEEPER}"
 fi
 
 DRUID_SET_HOST=${DRUID_SET_HOST:-1}
 if [ "${DRUID_SET_HOST}" = "1" ]
 then
-    setKey $SERVICE druid.host $(ip r get 1 | awk '{print $7;exit}')
+    # setKey $SERVICE druid.host $(ip r get 1 | awk '{print $7;exit}')
 fi
 
 env | grep ^druid_ | while read evar;
@@ -109,7 +109,7 @@ do
     # Can't use IFS='=' to parse since var might have = in it (e.g. password)
     val=$(echo "$evar" | sed -e 's?[^=]*=??')
     var=$(echo "$evar" | sed -e 's?^\([^=]*\)=.*?\1?g' -e 's?_?.?g')
-    setKey $SERVICE "$var" "$val"
+    # setKey $SERVICE "$var" "$val"
 done
 
 env |grep ^s3service | while read evar
