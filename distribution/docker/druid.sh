@@ -40,14 +40,14 @@
 
 set -e
 SERVICE="$1"
-
+echo "TEST"
+echo "I am $(whoami)"
+echo "$USER"
 echo "$(date -Is) startup service $SERVICE"
 
 # We put all the config in /tmp/conf to allow for a
 # read-only root filesystem
-echo whoami
-echo $(whoami)
-echo "$USER"
+echo "TEST_END"
 mkdir -p /tmp/conf/
 test -d /tmp/conf/druid && rm -r /tmp/conf/druid
 cp -r /opt/druid/conf/druid /tmp/conf/druid
