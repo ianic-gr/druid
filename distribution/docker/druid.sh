@@ -52,22 +52,21 @@ cp -r /opt/druid/conf/druid /tmp/conf/druid
 
 echo "Ekana copy :)"
 
-
-# getConfPath() {
-#     cluster_conf_base=/tmp/conf/druid/cluster
-#     case "$1" in
-#     _common) echo $cluster_conf_base/_common ;;
-#     historical) echo $cluster_conf_base/data/historical ;;
-#     middleManager) echo $cluster_conf_base/data/middleManager ;;
-#     indexer) echo $cluster_conf_base/data/indexer ;;
-#     coordinator | overlord) echo $cluster_conf_base/master/coordinator-overlord ;;
-#     broker) echo $cluster_conf_base/query/broker ;;
-#     router) echo $cluster_conf_base/query/router ;;
-#     *) echo $cluster_conf_base/misc/$1 ;;
-#     esac
-# }
-# COMMON_CONF_DIR=$(getConfPath _common)
-# SERVICE_CONF_DIR=$(getConfPath ${SERVICE})
+getConfPath() {
+    cluster_conf_base=/tmp/conf/druid/cluster
+    case "$1" in
+    _common) echo $cluster_conf_base/_common ;;
+    historical) echo $cluster_conf_base/data/historical ;;
+    middleManager) echo $cluster_conf_base/data/middleManager ;;
+    indexer) echo $cluster_conf_base/data/indexer ;;
+    coordinator | overlord) echo $cluster_conf_base/master/coordinator-overlord ;;
+    broker) echo $cluster_conf_base/query/broker ;;
+    router) echo $cluster_conf_base/query/router ;;
+    *) echo $cluster_conf_base/misc/$1 ;;
+    esac
+}
+COMMON_CONF_DIR=$(getConfPath _common)
+SERVICE_CONF_DIR=$(getConfPath ${SERVICE})
 
 # # Delete the old key (if existing) and append new key=value
 # setKey() {
@@ -143,7 +142,7 @@ echo "Ekana copy :)"
 # if [ -n "$DRUID_NEWSIZE" ]; then setJavaKey ${SERVICE} -XX:NewSize -XX:NewSize=${DRUID_NEWSIZE}; fi
 # if [ -n "$DRUID_MAXDIRECTMEMORYSIZE" ]; then setJavaKey ${SERVICE} -XX:MaxDirectMemorySize -XX:MaxDirectMemorySize=${DRUID_MAXDIRECTMEMORYSIZE}; fi
 
-# JAVA_OPTS="$JAVA_OPTS $(cat $SERVICE_CONF_DIR/jvm.config | xargs)"
+JAVA_OPTS="$JAVA_OPTS $(cat $SERVICE_CONF_DIR/jvm.config | xargs)"
 
 # if [ -n "$DRUID_LOG_LEVEL" ]
 # then
@@ -161,4 +160,4 @@ echo "Ekana copy :)"
 #     mkdir -p ${DRUID_DIRS_TO_CREATE}
 # fi
 
-# exec java ${JAVA_OPTS} -cp $COMMON_CONF_DIR:$SERVICE_CONF_DIR:lib/*: org.apache.druid.cli.Main server $@
+exec java ${JAVA_OPTS} -cp $COMMON_CONF_DIR:$SERVICE_CONF_DIR:lib/*: org.apache.druid.cli.Main server $@
