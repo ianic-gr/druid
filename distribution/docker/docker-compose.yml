@@ -78,7 +78,7 @@ services:
         condition: on-failure
 
   coordinator:
-    image: apache/druid:0.22.0
+    image: apache/druid:tag
     hostname: coordinator
     volumes:
       - druid_shared:/opt/shared
@@ -107,7 +107,7 @@ services:
         condition: on-failure
        
   broker:
-    image: apache/druid:0.22.0
+    image: apache/druid:tag
     hostname: broker
     volumes:
       - broker_var:/opt/druid/var
@@ -135,7 +135,7 @@ services:
         condition: on-failure
       
   historical:
-    image: apache/druid:0.22.0
+    image: apache/druid:tag
     hostname: historical
     volumes:
       - druid_shared:/opt/shared
@@ -164,7 +164,7 @@ services:
         condition: on-failure
       
   middlemanager:
-    image: apache/druid:0.22.0
+    image: apache/druid:tag
     hostname: middlemanager
     volumes:
       - druid_shared:/opt/shared
@@ -193,7 +193,7 @@ services:
         condition: on-failure
       
   router:
-    image: apache/druid:0.22.0
+    image: apache/druid:tag
     hostname: router
     volumes:
       - router_var:/opt/druid/var
