@@ -299,7 +299,7 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
             
-        networks:
+    networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
       replicas: 1                 
