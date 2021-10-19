@@ -83,7 +83,6 @@ services:
     volumes:
       - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - coordinator
     configs:
@@ -95,8 +94,6 @@ services:
         target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/jvm.config
       - source: coordinator_runtime_config
         target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/runtime.properties
-    # env_file:
-    #   - environment
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -111,7 +108,6 @@ services:
     hostname: broker
     volumes:
       - broker_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - broker
     configs:
@@ -123,8 +119,6 @@ services:
         target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
       - source: broker_runtime_config
         target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
-    # env_file:
-    #   - broker_env
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -140,7 +134,6 @@ services:
     volumes:
       - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - historical
     configs:
@@ -152,8 +145,6 @@ services:
         target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
       - source: historical_runtime_config
         target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
-    # env_file:
-    #   - historical_env
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -169,7 +160,6 @@ services:
     volumes:
       - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     command:
       - middleManager
     configs:
@@ -181,8 +171,6 @@ services:
         target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
       - source: middleManager_runtime_config
         target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
-    # env_file:
-    #   - middlemanager_env
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -197,7 +185,6 @@ services:
     hostname: router
     volumes:
       - router_var:/opt/druid/var
-      # - common:/opt/druid/conf/druid/cluster/cluster/_common
     ports:
       - "8888:8888"
     command:
@@ -211,8 +198,6 @@ services:
         target: /opt/druid/conf/druid/cluster/query/router/jvm.config
       - source: router_runtime_config
         target: /opt/druid/conf/druid/cluster/query/router/runtime.properties
-    # env_file:
-    #   - router_env
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
