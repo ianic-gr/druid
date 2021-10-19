@@ -154,10 +154,10 @@ JAVA_OPTS="$JAVA_OPTS $(cat $SERVICE_CONF_DIR/jvm.config | xargs)"
 #     echo "$DRUID_LOG4J" >$COMMON_CONF_DIR/log4j2.xml
 # fi
 
-# DRUID_DIRS_TO_CREATE=${DRUID_DIRS_TO_CREATE-'var/tmp var/druid/segments var/druid/indexing-logs var/druid/task var/druid/hadoop-tmp var/druid/segment-cache'}
-# if [ -n "${DRUID_DIRS_TO_CREATE}" ]
-# then
-#     mkdir -p ${DRUID_DIRS_TO_CREATE}
-# fi
+ DRUID_DIRS_TO_CREATE=${DRUID_DIRS_TO_CREATE-'var/tmp var/druid/segments var/druid/indexing-logs var/druid/task var/druid/hadoop-tmp var/druid/segment-cache'}
+ if [ -n "${DRUID_DIRS_TO_CREATE}" ]
+ then
+     mkdir -p ${DRUID_DIRS_TO_CREATE}
+ fi
 
 exec java ${JAVA_OPTS} -cp $COMMON_CONF_DIR:$SERVICE_CONF_DIR:lib/*: org.apache.druid.cli.Main server $@
