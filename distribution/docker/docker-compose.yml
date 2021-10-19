@@ -94,6 +94,26 @@ services:
         target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/jvm.config
       - source: coordinator_runtime_config
         target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -119,6 +139,26 @@ services:
         target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
       - source: broker_runtime_config
         target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml  
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -145,6 +185,26 @@ services:
         target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
       - source: historical_runtime_config
         target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml  
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -171,6 +231,26 @@ services:
         target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
       - source: middleManager_runtime_config
         target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
@@ -198,7 +278,28 @@ services:
         target: /opt/druid/conf/druid/cluster/query/router/jvm.config
       - source: router_runtime_config
         target: /opt/druid/conf/druid/cluster/query/router/runtime.properties
-    networks:
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+            
+        networks:
       - infra_iot-big-data-infastructure_iot_bigdata
     deploy:                 
       replicas: 1                 
@@ -232,3 +333,24 @@ configs:
     file: ./conf/druid/middleManager/jvm.config
   middleManager_runtime_config:
     file: ./conf/druid/middleManager/runtime.properties
+  hadoop_core-site:
+    file: ./xmls/core-site.xml
+  hadoop_capacity-scheduler:
+    file: ./xmls/capacity-scheduler.xml
+  hadoop-policy:
+    file: ./xmls/hadoop-policy.xml
+  hadoop_hdfs-rbf-site:
+    file: ./xmls/hdfs-rbf-site.xml
+  hadoop_hdfs-site:
+    file: ./xmls/hdfs-site.xml
+  hadoop_httpfs-site:
+    file: ./xmls/httpfs-site.xml
+  hadoop_kms-acls:
+    file: ./xmls/kms-acls.xml
+  hadoop_kms-site:
+    file: ./xmls/kms-site.xml
+  hadoop_mapred-site:
+    file: ./xmls/mapred-site.xml
+  hadoop_yarn-site:
+    file: ./xmls/yarn-site.xml
+    

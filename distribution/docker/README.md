@@ -19,7 +19,7 @@
 
 ## Build
 
-From the root of the repo, run `docker build -t apache/druid:tag -f distribution/docker/Dockerfile .`
+From the root of the repo, run `docker build -t apache/druid:ianic-0.1.0 -f distribution/docker/Dockerfile .`
 
 ## Run
 
