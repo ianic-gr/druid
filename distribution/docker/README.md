@@ -19,7 +19,7 @@
 
 ## Build
 
-From the root of the repo, run `docker build -t apache/druid:ianic-0.1.0 -f distribution/docker/Dockerfile .`
+From the root of the repo, run `docker build -t apache/druid:ianic-{version} -f distribution/docker/Dockerfile .`
 
 ## Run
 
@@ -42,13 +42,12 @@ where `druid:tag` is the version to use as the base.
 # Docker Swarm deployment
 
 ## Docker compose
-First run ``docker stack deploy -c zookeeper-compose.yml zoo``
-to deploy the zookeeper
+Navigate to ``distribution/docker`` and run
 
-For druid run ``docker stack deploy -c docker-compose.yml druid``
+    docker stack deploy -c docker-compose.yml druid
 
 ## Configuration
-The configuration for each of the druid services is in
- ``{serviceName}_env``
+Configurations for the druid services are in ``distribution/docker/conf/druid/``
 
- This is done as a temporary workaround because each service needs a different ``druid.host``
+and are loaded using the ``configs`` option from within [docker-compose.yml](docker-compose.yml)
+ 
