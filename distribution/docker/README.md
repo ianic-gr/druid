@@ -19,7 +19,7 @@
 
 ## Build
 
-From the root of the repo, run `docker build -t apache/druid:ianic-0.1.0 -f distribution/docker/Dockerfile .`
+From the root of the repo, run `docker build -t apache/druid:ianic-{version} -f distribution/docker/Dockerfile .`
 
 ## Run
 
@@ -38,3 +38,16 @@ it to the base image above.
 `docker build -t apache/druid:tag-mysql --build-arg DRUID_RELEASE=apache/druid:tag -f distribution/docker/Dockerfile.mysql .`
 
 where `druid:tag` is the version to use as the base.
+
+# Docker Swarm deployment
+
+## Docker compose
+Navigate to ``distribution/docker`` and run
+
+    docker stack deploy -c docker-compose.yml druid
+
+## Configuration
+Configurations for the druid services are in ``distribution/docker/conf/druid/``
+
+and are loaded using the ``configs`` option from within [docker-compose.yml](docker-compose.yml)
+ 
