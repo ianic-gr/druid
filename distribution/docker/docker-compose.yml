@@ -32,7 +32,7 @@ volumes:
   zoo_logs: {}
 
 networks:
-  infra_iot-big-data-infastructure_iot_bigdata:
+  infra_big_data_net:
     external: true
 
 services:
@@ -44,7 +44,7 @@ services:
       - zookeeper_datalog:/datalog
       - zoo_logs:/logs
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     ports:
       - 2181:2181
     environment:
@@ -69,7 +69,7 @@ services:
        POSTGRES_DB: druid
     command: -p 5442
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -115,7 +115,7 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -160,7 +160,7 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml  
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -206,7 +206,7 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml  
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -252,7 +252,7 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
@@ -300,7 +300,7 @@ services:
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
             
     networks:
-      - infra_iot-big-data-infastructure_iot_bigdata
+      - infra_big_data_net
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
