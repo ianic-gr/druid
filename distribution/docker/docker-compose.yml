@@ -68,6 +68,8 @@ services:
        POSTGRES_USER: druid
        POSTGRES_DB: druid
     command: -p 5442
+    ports:
+      - "5442:5442"
     networks:
       - infra_big_data_net
     deploy:                 
