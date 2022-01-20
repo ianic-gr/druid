@@ -19,7 +19,11 @@
 <configuration>
 <property><name>io.compression.codecs</name><value>org.apache.hadoop.io.compress.SnappyCodec</value></property>
 <property><name>fs.defaultFS</name><value>hdfs://namenode:50070</value></property>
+<property><name>file.blocksize</name><value>2097152 </value></property>
 <property><name>hadoop.proxyuser.hue.hosts</name><value>*</value></property>
+<property><name>net.topology.script.number.args</name><value>75</value></property>
 <property><name>hadoop.proxyuser.hue.groups</name><value>*</value></property>
 <property><name>hadoop.http.staticuser.user</name><value>root</value></property>
+<property><name>ftp.blocksize</name><value>2097152</value></property>
+<property><name>net.topology.script.file.name</name><value>/etc/hadoop/rack-topology.sh</value></property>
 </configuration>

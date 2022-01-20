@@ -19,9 +19,10 @@
 <configuration>
 
 <property><name>dfs.webhdfs.enabled</name><value>true</value></property>
-<property><name>dfs.datanode.data.dir</name><value>file:///hadoop/dfs/data</value></property>
+<property><name>dfs.block.size</name><value>2097152</value></property>
 <property><name>dfs.namenode.datanode.registration.ip-hostname-check</name><value>false</value></property>
 <property><name>dfs.permissions.enabled</name><value>false</value></property>
+<property><name>dfs.namenode.name.dir</name><value>file:///hadoop/dfs/name</value></property>
 <property><name>dfs.namenode.rpc-bind-host</name><value>0.0.0.0</value></property>
 <property><name>dfs.namenode.servicerpc-bind-host</name><value>0.0.0.0</value></property>
 <property><name>dfs.namenode.http-bind-host</name><value>0.0.0.0</value></property>
