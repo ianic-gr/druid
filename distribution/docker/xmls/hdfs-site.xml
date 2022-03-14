@@ -23,7 +23,7 @@
   </property>
   <property>
     <name>dfs.block.size</name>
-    <value>2097152</value>
+    <value>524288</value>
   </property>
   <property>
     <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
