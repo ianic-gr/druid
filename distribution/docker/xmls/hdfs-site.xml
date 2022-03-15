@@ -26,6 +26,10 @@
     <value>524288</value>
   </property>
   <property>
+    <name>dfs.namenode.fs-limits.min-block-size</name>
+    <value>524288</value>
+  </property>
+  <property>
     <name>dfs.namenode.datanode.registration.ip-hostname-check</name>
     <value>false</value>
   </property>
