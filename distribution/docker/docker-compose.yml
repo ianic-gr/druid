@@ -51,6 +51,8 @@ services:
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
       ZOOKEEPER_CLIENT_PORT: 2181
+      ZOO_AUTOPURGE_PURGEINTERVAL: 24
+      ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
