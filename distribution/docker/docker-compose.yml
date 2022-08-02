@@ -85,7 +85,7 @@ services:
     image: apache/druid:ianic-0.1.0
     hostname: coordinator
     volumes:
-      #- druid_shared:/opt/shared
+      - druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
     command:
       - coordinator
@@ -176,7 +176,7 @@ services:
     image: apache/druid:ianic-0.1.0
     hostname: historical
     volumes:
-      #- druid_shared:/opt/shared
+      - druid_shared:/opt/shared
       - historical_var:/opt/druid/var
     command:
       - historical
@@ -214,7 +214,7 @@ services:
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
-        constraints: [node.hostname == server6.ianic.gr]                                                                                      
+        constraints: [node.hostname == server3.ianic.gr]                                                                                      
       restart_policy:                                
         condition: on-failure
       
@@ -222,7 +222,7 @@ services:
     image: apache/druid:ianic-0.1.0
     hostname: middlemanager
     volumes:
-      #- druid_shared:/opt/shared
+      - druid_shared:/opt/shared
       - middle_var:/opt/druid/var
     command:
       - middleManager
@@ -260,7 +260,7 @@ services:
     deploy:                 
       replicas: 1                 
       placement:                                                                                         
-        constraints: [node.hostname == server6.ianic.gr]                                                                                      
+        constraints: [node.hostname == server3.ianic.gr]                                                                                      
       restart_policy:                                
         condition: on-failure
       
