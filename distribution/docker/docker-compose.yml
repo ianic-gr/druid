@@ -26,7 +26,7 @@ volumes:
   coordinator_var: {}
   router_var: {}
   common: {}
-  druid_shared: {}
+  #druid_shared: {}
   zookeeper_data: {}
   zookeeper_datalog: {}
   zoo_logs: {}
@@ -85,7 +85,7 @@ services:
     image: apache/druid:ianic-0.1.0
     hostname: coordinator
     volumes:
-      - druid_shared:/opt/shared
+      #- druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
     command:
       - coordinator
@@ -176,7 +176,7 @@ services:
     image: apache/druid:ianic-0.1.0
     hostname: historical
     volumes:
-      - druid_shared:/opt/shared
+      #- druid_shared:/opt/shared
       - historical_var:/opt/druid/var
     command:
       - historical
@@ -222,7 +222,7 @@ services:
     image: apache/druid:ianic-0.1.0
     hostname: middlemanager
     volumes:
-      - druid_shared:/opt/shared
+      #- druid_shared:/opt/shared
       - middle_var:/opt/druid/var
     command:
       - middleManager
