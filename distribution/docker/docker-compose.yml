@@ -258,9 +258,9 @@ services:
     networks:
       - infra_big_data_net
     deploy:                 
-      replicas: 1                 
+      replicas: 2                 
       placement:                                                                                         
-        constraints: [node.hostname == server6.ianic.gr]                                                                                      
+        constraints: [node.hostname == server6.ianic.gr, node.hostname == server4.ianic.gr]                                                                                      
       restart_policy:                                
         condition: on-failure
       
