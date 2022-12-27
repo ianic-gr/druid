@@ -21,7 +21,7 @@ version: "3.6"
 volumes:
   metadata_data: {}
   middle_var: {}
-  middle_var2: {}
+  middle_var_2: {}
   historical_var: {}
   broker_var: {}
   coordinator_var: {}
@@ -270,7 +270,7 @@ services:
     hostname: middlemanager2
     volumes:
       #- druid_shared:/opt/shared
-      - middle_var2:/opt/druid/var
+      - middle_var_2:/opt/druid/var
     command:
       - middleManager
     configs:
