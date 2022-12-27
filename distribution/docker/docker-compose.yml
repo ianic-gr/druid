@@ -261,7 +261,7 @@ services:
     deploy:
       replicas: 1
       placement:
-        constraints: [ node.hostname == server6.ianic.gr ]
+        constraints: [ node.hostname == server4.ianic.gr ]
       restart_policy:
         condition: on-failure
 
