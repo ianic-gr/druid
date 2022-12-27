@@ -21,7 +21,7 @@ version: "3.6"
 volumes:
   metadata_data: {}
   middle_var: {}
-  #middle_var2: {}
+  middle_var2: {}
   historical_var: {}
   broker_var: {}
   coordinator_var: {}
