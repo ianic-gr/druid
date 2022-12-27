@@ -23,7 +23,7 @@ volumes:
   middle_var: { }
   middle_var_2: { }
   historical_var: { }
-  historical_var_2: { }
+  #historical_var_2: { }
   broker_var: { }
   coordinator_var: { }
   router_var: { }
@@ -220,51 +220,51 @@ services:
       restart_policy:
         condition: on-failure
 
-  historical2:
-    image: apache/druid:ianic-1.0.0
-    hostname: historical2
-    volumes:
-      #- druid_shared:/opt/shared
-      - historical_var_2:/opt/druid/var
-    command:
-      - historical
-    configs:
-      - source: common_runtime_config
-        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
-      - source: common_log4j_config
-        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
-      - source: historical_jvm_config
-        target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
-      - source: historical_runtime_config2
-        target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
-      - source: hadoop_core-site
-        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
-      - source: hadoop_capacity-scheduler
-        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
-      - source: hadoop-policy
-        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
-      - source: hadoop_hdfs-rbf-site
-        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
-      - source: hadoop_hdfs-site
-        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
-      - source: hadoop_httpfs-site
-        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
-      - source: hadoop_kms-acls
-        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
-      - source: hadoop_kms-site
-        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
-      - source: hadoop_mapred-site
-        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
-      - source: hadoop_yarn-site
-        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
-    networks:
-      - infra_big_data_net
-    deploy:
-      replicas: 1
-      placement:
-        constraints: [ node.hostname == server4.ianic.gr ]
-      restart_policy:
-        condition: on-failure
+  # historical2:
+  #   image: apache/druid:ianic-1.0.0
+  #   hostname: historical2
+  #   volumes:
+  #     #- druid_shared:/opt/shared
+  #     - historical_var_2:/opt/druid/var
+  #   command:
+  #     - historical
+  #   configs:
+  #     - source: common_runtime_config
+  #       target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+  #     - source: common_log4j_config
+  #       target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+  #     - source: historical_jvm_config
+  #       target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
+  #     - source: historical_runtime_config2
+  #       target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
+  #     - source: hadoop_core-site
+  #       target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+  #     - source: hadoop_capacity-scheduler
+  #       target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+  #     - source: hadoop-policy
+  #       target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+  #     - source: hadoop_hdfs-rbf-site
+  #       target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+  #     - source: hadoop_hdfs-site
+  #       target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+  #     - source: hadoop_httpfs-site
+  #       target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+  #     - source: hadoop_kms-acls
+  #       target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+  #     - source: hadoop_kms-site
+  #       target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+  #     - source: hadoop_mapred-site
+  #       target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+  #     - source: hadoop_yarn-site
+  #       target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+  #   networks:
+  #     - infra_big_data_net
+  #   deploy:
+  #     replicas: 1
+  #     placement:
+  #       constraints: [ node.hostname == server4.ianic.gr ]
+  #     restart_policy:
+  #       condition: on-failure
 
   middlemanager:
     image: apache/druid:ianic-1.0.0
