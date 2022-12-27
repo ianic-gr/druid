@@ -279,9 +279,9 @@ services:
       - source: common_log4j_config
         target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
       - source: middleManager_jvm_config
-        target: /opt/druid/conf/druid/cluster/data/middleManager2/jvm.config
-      - source: middleManager_runtime_config
-        target: /opt/druid/conf/druid/cluster/data/middleManager2/runtime.properties
+        target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
+      - source: middleManager_runtime_config_2
+        target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
       - source: hadoop_core-site
         target: /opt/druid/conf/druid/cluster/_common/core-site.xml
       - source: hadoop_capacity-scheduler
@@ -383,6 +383,8 @@ configs:
     file: ./conf/druid/middleManager/jvm.config
   middleManager_runtime_config:
     file: ./conf/druid/middleManager/runtime.properties
+  middleManager_runtime_config_2:
+    file: ./conf/druid/middleManager2/runtime.properties
   hadoop_core-site:
     file: ./xmls/core-site.xml
   hadoop_capacity-scheduler:
@@ -403,4 +405,3 @@ configs:
     file: ./xmls/mapred-site.xml
   hadoop_yarn-site:
     file: ./xmls/yarn-site.xml
-    
