@@ -25,6 +25,7 @@ volumes:
   historical_var: { }
   historical_var_2: { }
   broker_var: { }
+  broker_var_2: { }
   coordinator_var: { }
   router_var: { }
   common: { }
@@ -171,6 +172,51 @@ services:
       replicas: 1
       placement:
         constraints: [ node.hostname == server3.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  broker2:
+    image: apache/druid:ianic-1.0.0
+    hostname: broker2
+    volumes:
+      - broker_var_2:/opt/druid/var
+    command:
+      - broker
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: broker_jvm_config
+        target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
+      - source: broker_runtime_config2
+        target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server6.ianic.gr ]
       restart_policy:
         condition: on-failure
 
@@ -414,6 +460,8 @@ configs:
     file: ./conf/druid/broker/jvm.config
   broker_runtime_config:
     file: ./conf/druid/broker/runtime.properties
+  broker_runtime_config2:
+    file: ./conf/druid/broker2/runtime.properties
   router_jvm_config:
     file: ./conf/druid/router/jvm.config
   router_runtime_config:
