@@ -51,7 +51,7 @@ services:
     ports:
       - "2181:2181"
     environment:
-      JAVA_TOOL_OPTIONS: -Djute.maxbuffer=5000000
+      JAVA_TOOL_OPTIONS: -Djute.maxbuffer=5000000 -Xmx8g
       ZOO_MY_ID: 1
       ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
       ZOOKEEPER_CLIENT_PORT: 2181
