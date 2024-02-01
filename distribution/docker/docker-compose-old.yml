@@ -1,0 +1,651 @@
+#
+# Licensed to the Apache Software Foundation (ASF) under one
+# or more contributor license agreements.  See the NOTICE file
+# distributed with this work for additional information
+# regarding copyright ownership.  The ASF licenses this file
+# to you under the Apache License, Version 2.0 (the
+# "License"); you may not use this file except in compliance
+# with the License.  You may obtain a copy of the License at
+#
+#   http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing,
+# software distributed under the License is distributed on an
+# "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
+# KIND, either express or implied.  See the License for the
+# specific language governing permissions and limitations
+# under the License.
+#
+version: "3.6"
+
+volumes:
+  metadata_data: { }
+  middle_var: { }
+  middle_var_2: { }
+  middle_var_3: { }
+  historical_var: { }
+  historical_var_2: { }
+  historical_var_3: { }
+  broker_var: { }
+  broker_var_2: { }
+  broker_var_3: { }
+  coordinator_var: { }
+  router_var: { }
+  common: { }
+  #druid_shared: {}
+  zookeeper_data: { }
+  zookeeper_datalog: { }
+  zoo_logs: { }
+
+networks:
+  infra_big_data_net:
+    external: true
+
+services:
+  zookeeper1:
+    image: zookeeper:latest
+    hostname: zookeeper1
+    volumes:
+      - zookeeper_data:/data
+      - zookeeper_datalog:/datalog
+      - zoo_logs:/logs
+    networks:
+      - infra_big_data_net
+    ports:
+      - "2181:2181"
+    environment:
+      JAVA_TOOL_OPTIONS: -Djute.maxbuffer=5000000 -Xmx8g
+      ZOO_MY_ID: 1
+      ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOO_AUTOPURGE_PURGEINTERVAL: 24
+      ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server3.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  postgres:
+    image: postgres:14
+    volumes:
+      - metadata_data:/druid/data/postgres
+    environment:
+      PGDATA: /druid/data/postgres
+      POSTGRES_PASSWORD: va~;!2d4^&YLe;5#
+      POSTGRES_USER: druid
+      POSTGRES_DB: druid
+    command: -p 5442
+    ports:
+      - "5442:5442"
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server3.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  coordinator:
+    image: apache/druid:ianic-1.0.0
+    hostname: coordinator
+    volumes:
+      #- druid_shared:/opt/shared
+      - coordinator_var:/opt/druid/var
+    command:
+      - coordinator
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: coordinator_jvm_config
+        target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/jvm.config
+      - source: coordinator_runtime_config
+        target: /opt/druid/conf/druid/cluster/master/coordinator-overlord/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server3.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  broker:
+    image: apache/druid:ianic-1.0.0
+    hostname: broker
+    volumes:
+      - broker_var:/opt/druid/var
+    command:
+      - broker
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: broker_jvm_config
+        target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
+      - source: broker_runtime_config
+        target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server3.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  broker2:
+    image: apache/druid:ianic-1.0.0
+    hostname: broker2
+    volumes:
+      - broker_var_2:/opt/druid/var
+    command:
+      - broker
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: broker_jvm_config
+        target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
+      - source: broker_runtime_config2
+        target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server6.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  broker3:
+    image: apache/druid:ianic-1.0.0
+    hostname: broker3
+    volumes:
+      - broker_var_3:/opt/druid/var
+    command:
+      - broker
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: broker_jvm_config
+        target: /opt/druid/conf/druid/cluster/query/broker/jvm.config
+      - source: broker_runtime_config3
+        target: /opt/druid/conf/druid/cluster/query/broker/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server8.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  historical:
+    image: apache/druid:ianic-1.0.0
+    hostname: historical
+    volumes:
+      #- druid_shared:/opt/shared
+      - historical_var:/opt/druid/var
+    command:
+      - historical
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: historical_jvm_config
+        target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
+      - source: historical_runtime_config
+        target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server6.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  historical2:
+    image: apache/druid:ianic-1.0.0
+    hostname: historical2
+    volumes:
+      #- druid_shared:/opt/shared
+      - historical_var_2:/opt/druid/var
+    command:
+      - historical
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: historical_jvm_config
+        target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
+      - source: historical_runtime_config2
+        target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server4.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  historical3:
+    image: apache/druid:ianic-1.0.0
+    hostname: historical3
+    volumes:
+      #- druid_shared:/opt/shared
+      - historical_var_3:/opt/druid/var
+    command:
+      - historical
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: historical_jvm_config
+        target: /opt/druid/conf/druid/cluster/data/historical/jvm.config
+      - source: historical_runtime_config3
+        target: /opt/druid/conf/druid/cluster/data/historical/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server8.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  middlemanager:
+    image: apache/druid:ianic-1.0.0
+    hostname: middlemanager
+    volumes:
+      #- druid_shared:/opt/shared
+      - middle_var:/opt/druid/var
+    command:
+      - middleManager
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: middleManager_jvm_config
+        target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
+      - source: middleManager_runtime_config
+        target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server6.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  middlemanager2:
+    image: apache/druid:ianic-1.0.0
+    hostname: middlemanager2
+    volumes:
+      #- druid_shared:/opt/shared
+      - middle_var_2:/opt/druid/var
+    command:
+      - middleManager
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: middleManager_jvm_config
+        target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
+      - source: middleManager_runtime_config_2
+        target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server4.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  middlemanager3:
+    image: apache/druid:ianic-1.0.0
+    hostname: middlemanager3
+    volumes:
+      #- druid_shared:/opt/shared
+      - middle_var_3:/opt/druid/var
+    command:
+      - middleManager
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: middleManager_jvm_config
+        target: /opt/druid/conf/druid/cluster/data/middleManager/jvm.config
+      - source: middleManager_runtime_config_3
+        target: /opt/druid/conf/druid/cluster/data/middleManager/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server8.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+  router:
+    image: apache/druid:ianic-1.0.0
+    hostname: router
+    volumes:
+      - router_var:/opt/druid/var
+    ports:
+      - "8888:8888"
+    command:
+      - router
+    configs:
+      - source: common_runtime_config
+        target: /opt/druid/conf/druid/cluster/_common/common.runtime.properties
+      - source: common_log4j_config
+        target: /opt/druid/conf/druid/cluster/_common/log4j2.xml
+      - source: router_jvm_config
+        target: /opt/druid/conf/druid/cluster/query/router/jvm.config
+      - source: router_runtime_config
+        target: /opt/druid/conf/druid/cluster/query/router/runtime.properties
+      - source: hadoop_core-site
+        target: /opt/druid/conf/druid/cluster/_common/core-site.xml
+      - source: hadoop_capacity-scheduler
+        target: /opt/druid/conf/druid/cluster/_common/capacity-scheduler.xml
+      - source: hadoop-policy
+        target: /opt/druid/conf/druid/cluster/_common/hadoop-policy.xml
+      - source: hadoop_hdfs-rbf-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-rbf-site.xml
+      - source: hadoop_hdfs-site
+        target: /opt/druid/conf/druid/cluster/_common/hdfs-site.xml
+      - source: hadoop_httpfs-site
+        target: /opt/druid/conf/druid/cluster/_common/httpfs-site.xml
+      - source: hadoop_kms-acls
+        target: /opt/druid/conf/druid/cluster/_common/kms-acls.xml
+      - source: hadoop_kms-site
+        target: /opt/druid/conf/druid/cluster/_common/kms-site.xml
+      - source: hadoop_mapred-site
+        target: /opt/druid/conf/druid/cluster/_common/mapred-site.xml
+      - source: hadoop_yarn-site
+        target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
+    networks:
+      - infra_big_data_net
+    deploy:
+      replicas: 1
+      placement:
+        constraints: [ node.hostname == server3.ianic.gr ]
+      restart_policy:
+        condition: on-failure
+
+configs:
+  common_runtime_config:
+    file: ./conf/druid-old/_common/common.runtime.properties
+  common_log4j_config:
+    file: ./conf/druid-old/_common/log4j2.xml
+  broker_jvm_config:
+    file: ./conf/druid-old/broker/jvm.config
+  broker_runtime_config:
+    file: ./conf/druid-old/broker/runtime.properties
+  broker_runtime_config2:
+    file: ./conf/druid-old/broker2/runtime.properties
+  broker_runtime_config3:
+    file: ./conf/druid-old/broker3/runtime.properties
+  router_jvm_config:
+    file: ./conf/druid-old/router/jvm.config
+  router_runtime_config:
+    file: ./conf/druid-old/router/runtime.properties
+  coordinator_jvm_config:
+    file: ./conf/druid-old/coordinator/jvm.config
+  coordinator_runtime_config:
+    file: ./conf/druid-old/coordinator/runtime.properties
+  historical_jvm_config:
+    file: ./conf/druid-old/historical/jvm.config
+  historical_runtime_config:
+    file: ./conf/druid-old/historical/runtime.properties
+  historical_runtime_config2:
+    file: ./conf/druid-old/historical2/runtime.properties
+  historical_runtime_config3:
+    file: ./conf/druid-old/historical3/runtime.properties
+  middleManager_jvm_config:
+    file: ./conf/druid-old/middleManager/jvm.config
+  middleManager_runtime_config:
+    file: ./conf/druid-old/middleManager/runtime.properties
+  middleManager_runtime_config_2:
+    file: ./conf/druid-old/middleManager2/runtime.properties
+  middleManager_runtime_config_3:
+    file: ./conf/druid-old/middleManager3/runtime.properties
+  hadoop_core-site:
+    file: ./xmls/core-site.xml
+  hadoop_capacity-scheduler:
+    file: ./xmls/capacity-scheduler.xml
+  hadoop-policy:
+    file: ./xmls/hadoop-policy.xml
+  hadoop_hdfs-rbf-site:
+    file: ./xmls/hdfs-rbf-site.xml
+  hadoop_hdfs-site:
+    file: ./xmls/hdfs-site.xml
+  hadoop_httpfs-site:
+    file: ./xmls/httpfs-site.xml
+  hadoop_kms-acls:
+    file: ./xmls/kms-acls.xml
+  hadoop_kms-site:
+    file: ./xmls/kms-site.xml
+  hadoop_mapred-site:
+    file: ./xmls/mapred-site.xml
+  hadoop_yarn-site:
+    file: ./xmls/yarn-site.xml
