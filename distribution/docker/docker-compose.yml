@@ -20,63 +20,46 @@ version: "3.6"
 
 volumes:
   metadata_data:
-    external:
-      name: druid_metadata_data
+    name: druid_metadata_data
   middle_var:
-    external:
-      name: druid_middle_var
+    name: druid_middle_var
   middle_var_2:
-    external:
-      name: druid_middle_var_2
+    name: druid_middle_var_2
   middle_var_3:
-    external:
-      name: druid_middle_var_3
+    name: druid_middle_var_3
   historical_var:
-    external:
-      name: druid_historical_var
+    name: druid_historical_var
   historical_var_2:
-    external:
-      name: druid_historical_var_2
+    name: druid_historical_var_2
   historical_var_3:
-    external:
-      name: druid_historical_var_3
+    name: druid_historical_var_3
   broker_var:
-    external:
-      name: druid_broker_var
+    name: druid_broker_var
   broker_var_2:
-    external:
-      name: druid_broker_var_2
+    name: druid_broker_var_2
   broker_var_3:
-    external:
-      name: druid_broker_var_3
+    name: druid_broker_var_3
   coordinator_var:
-    external:
-      name: druid_coordinator_var
+    name: druid_coordinator_var
   router_var:
-    external:
-      name: druid_router_var
+    name: druid_router_var
   common:
-    external:
-      name: druid_common
+    name: druid_common
   zookeeper_data:
-    external:
-      name: druid_zookeeper_data
+    name: druid_zookeeper_data
   zookeeper_datalog:
-    external:
-      name: druid_zookeeper_datalog
+    name: druid_zookeeper_datalog
   zoo_logs:
-    external:
-      name: druid_zoo_logs
-  #druid_shared: {}
+    name: druid_zoo_logs
+
 
 networks:
   infra_big_data_net:
     external: true
 
 services:
-  zookeeper1:
+  v1-zookeeper1:
     image: zookeeper:latest
-    hostname: zookeeper1
     volumes:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
@@ -88,7 +71,7 @@ services:
     environment:
       JAVA_TOOL_OPTIONS: -Djute.maxbuffer=5000000 -Xmx8g
       ZOO_MY_ID: 1
-      ZOO_SERVERS: server.1=zookeeper1:2888:3888;2181
+      ZOO_SERVERS: server.1=v1-zookeeper1:2888:3888;2181
       ZOOKEEPER_CLIENT_PORT: 2181
       ZOO_AUTOPURGE_PURGEINTERVAL: 24
       ZOO_AUTOPURGE_SNAPRETAINCOUNT: 3
@@ -99,7 +82,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  postgres:
+  v1-postgres:
     image: postgres:14
     volumes:
       - metadata_data:/druid/data/postgres
@@ -120,11 +103,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  coordinator:
+  v1-coordinator:
     image: apache/druid:ianic-1.0.0
-    hostname: coordinator
     volumes:
-      #- druid_shared:/opt/shared
       - coordinator_var:/opt/druid/var
     command:
       - coordinator
@@ -166,9 +147,8 @@ services:
       restart_policy:
         condition: on-failure
 
-  broker:
+  v1-broker:
     image: apache/druid:ianic-1.0.0
-    hostname: broker
     volumes:
       - broker_var:/opt/druid/var
     command:
@@ -211,9 +191,8 @@ services:
       restart_policy:
         condition: on-failure
 
-  broker2:
+  v1-broker2:
     image: apache/druid:ianic-1.0.0
-    hostname: broker2
     volumes:
       - broker_var_2:/opt/druid/var
     command:
@@ -256,9 +235,8 @@ services:
       restart_policy:
         condition: on-failure
 
-  broker3:
+  v1-broker3:
     image: apache/druid:ianic-1.0.0
-    hostname: broker3
     volumes:
       - broker_var_3:/opt/druid/var
     command:
@@ -301,11 +279,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  historical:
+  v1-historical:
     image: apache/druid:ianic-1.0.0
-    hostname: historical
     volumes:
-      #- druid_shared:/opt/shared
       - historical_var:/opt/druid/var
     command:
       - historical
@@ -347,11 +323,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  historical2:
+  v1-historical2:
     image: apache/druid:ianic-1.0.0
-    hostname: historical2
     volumes:
-      #- druid_shared:/opt/shared
       - historical_var_2:/opt/druid/var
     command:
       - historical
@@ -393,11 +367,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  historical3:
+  v1-historical3:
     image: apache/druid:ianic-1.0.0
-    hostname: historical3
     volumes:
-      #- druid_shared:/opt/shared
       - historical_var_3:/opt/druid/var
     command:
       - historical
@@ -439,11 +411,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  middlemanager:
+  v1-middleManager:
     image: apache/druid:ianic-1.0.0
-    hostname: middlemanager
     volumes:
-      #- druid_shared:/opt/shared
       - middle_var:/opt/druid/var
     command:
       - middleManager
@@ -485,11 +455,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  middlemanager2:
+  v1-middleManager2:
     image: apache/druid:ianic-1.0.0
-    hostname: middlemanager2
     volumes:
-      #- druid_shared:/opt/shared
       - middle_var_2:/opt/druid/var
     command:
       - middleManager
@@ -531,11 +499,9 @@ services:
       restart_policy:
         condition: on-failure
 
-  middlemanager3:
+  v1-middleManager3:
     image: apache/druid:ianic-1.0.0
-    hostname: middlemanager3
     volumes:
-      #- druid_shared:/opt/shared
       - middle_var_3:/opt/druid/var
     command:
       - middleManager
@@ -577,9 +543,8 @@ services:
       restart_policy:
         condition: on-failure
 
-  router:
+  v1-router:
     image: apache/druid:ianic-1.0.0
-    hostname: router
     volumes:
       - router_var:/opt/druid/var
     ports:
