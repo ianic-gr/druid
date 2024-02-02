@@ -58,14 +58,16 @@ networks:
     external: true
 
 services:
-  v1-zookeeper1:
+  zookeeper1:
     image: zookeeper:latest
     volumes:
       - zookeeper_data:/data
       - zookeeper_datalog:/datalog
       - zoo_logs:/logs
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-zookeeper1
     ports:
       - "2181:2181"
     environment:
@@ -82,7 +84,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-postgres:
+  postgres:
     image: postgres:14
     volumes:
       - metadata_data:/druid/data/postgres
@@ -95,7 +97,9 @@ services:
     ports:
       - "5442:5442"
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-postgres
     deploy:
       replicas: 1
       placement:
@@ -103,7 +107,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-coordinator:
+  coordinator:
     image: apache/druid:ianic-1.0.0
     volumes:
       - coordinator_var:/opt/druid/var
@@ -139,7 +143,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-coordinator
     deploy:
       replicas: 1
       placement:
@@ -147,7 +153,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-broker:
+  broker:
     image: apache/druid:ianic-1.0.0
     volumes:
       - broker_var:/opt/druid/var
@@ -183,7 +189,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-broker
     deploy:
       replicas: 1
       placement:
@@ -191,7 +199,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-broker2:
+  broker2:
     image: apache/druid:ianic-1.0.0
     volumes:
       - broker_var_2:/opt/druid/var
@@ -227,7 +235,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-broker2
     deploy:
       replicas: 1
       placement:
@@ -235,7 +245,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-broker3:
+  broker3:
     image: apache/druid:ianic-1.0.0
     volumes:
       - broker_var_3:/opt/druid/var
@@ -271,7 +281,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-broker3
     deploy:
       replicas: 1
       placement:
@@ -279,7 +291,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-historical:
+  historical:
     image: apache/druid:ianic-1.0.0
     volumes:
       - historical_var:/opt/druid/var
@@ -315,7 +327,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-historical
     deploy:
       replicas: 1
       placement:
@@ -323,7 +337,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-historical2:
+  historical2:
     image: apache/druid:ianic-1.0.0
     volumes:
       - historical_var_2:/opt/druid/var
@@ -359,7 +373,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-historical2
     deploy:
       replicas: 1
       placement:
@@ -367,7 +383,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-historical3:
+  historical3:
     image: apache/druid:ianic-1.0.0
     volumes:
       - historical_var_3:/opt/druid/var
@@ -403,7 +419,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-historical3
     deploy:
       replicas: 1
       placement:
@@ -411,7 +429,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-middleManager:
+  middleManager:
     image: apache/druid:ianic-1.0.0
     volumes:
       - middle_var:/opt/druid/var
@@ -447,7 +465,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-middleManager
     deploy:
       replicas: 1
       placement:
@@ -455,7 +475,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-middleManager2:
+  middleManager2:
     image: apache/druid:ianic-1.0.0
     volumes:
       - middle_var_2:/opt/druid/var
@@ -491,7 +511,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-middleManager2
     deploy:
       replicas: 1
       placement:
@@ -499,7 +521,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-middleManager3:
+  middleManager3:
     image: apache/druid:ianic-1.0.0
     volumes:
       - middle_var_3:/opt/druid/var
@@ -535,7 +557,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-middleManager3
     deploy:
       replicas: 1
       placement:
@@ -543,7 +567,7 @@ services:
       restart_policy:
         condition: on-failure
 
-  v1-router:
+  router:
     image: apache/druid:ianic-1.0.0
     volumes:
       - router_var:/opt/druid/var
@@ -581,7 +605,9 @@ services:
       - source: hadoop_yarn-site
         target: /opt/druid/conf/druid/cluster/_common/yarn-site.xml
     networks:
-      - infra_big_data_net
+      infra_big_data_net:
+        aliases:
+          - v1-router
     deploy:
       replicas: 1
       placement:
