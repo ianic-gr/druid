@@ -613,6 +613,7 @@ services:
       infra_big_data_net:
         aliases:
           - druid-v1-router
+          - v1-router
     deploy:
       replicas: 1
       placement:
